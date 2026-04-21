@@ -257,6 +257,75 @@
 
     .story-body p:last-child { margin-bottom: 0; }
 
+    /* ─── THE FRAMEWORK ─── */
+    .framework-group {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: clamp(1.25rem, 4vw, 2.5rem);
+      align-items: start;
+      padding-bottom: 1.75rem;
+      margin-bottom: 1.75rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .framework-group:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .framework-group--swap {
+      grid-template-columns: 3fr 2fr;
+    }
+
+    .framework-group--swap .framework-card { order: 2; }
+    .framework-group--swap .framework-body-col { order: 1; }
+
+    .framework-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: 1.75rem 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .framework-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--text);
+    }
+
+    .framework-quote {
+      font-family: var(--font-serif);
+      font-size: 0.92rem;
+      font-style: italic;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .framework-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-light);
+      margin-top: 0.25rem;
+    }
+
+    .framework-body-col { padding-top: 0.15rem; }
+
+    .framework-body {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+    }
+
     /* ─── ABOUT ─── */
     .about-grid {
       display: grid;
@@ -477,6 +546,10 @@
       .practical-grid { grid-template-columns: 1fr 1fr; }
       .practical-item.wide { grid-column: 1 / -1; }
       .nav-links { display: none; }
+      .framework-group,
+      .framework-group--swap { grid-template-columns: 1fr; }
+      .framework-group--swap .framework-card,
+      .framework-group--swap .framework-body-col { order: unset; }
     }
   </style>
 </head>
@@ -537,6 +610,48 @@
       <div class="story-body">
         <p>Telling your story can be an important part of therapy — reflecting on your past, your childhood, and the relational and emotional environments that have shaped you. We may also consider intergenerational patterns: the ways experiences, beliefs, and wounds can be carried across families, often outside of conscious awareness.</p>
         <p>We can also work with where you are now, focusing on your current experience and where you would like to get to. Therapy can move fluidly between past and present, always guided by what feels most relevant and supportive for you.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- THE FRAMEWORK -->
+  <section class="section" id="framework">
+    <p class="section-label reveal">The Framework</p>
+    <h2 class="section-title reveal">How I work</h2>
+
+    <div class="framework-group reveal">
+      <div class="framework-card">
+        <h3 class="framework-title">Integrative transpersonal psychotherapy</h3>
+        <blockquote class="framework-quote">The privilege of a lifetime is to become who you truly are. — C.G. Jung</blockquote>
+        <p class="framework-label">The framework</p>
+      </div>
+      <div class="framework-body-col">
+        <p class="framework-body">My training at Re-Vision College draws on a range of traditions — psychodynamic, humanistic, existential, transpersonal — creating a spacious, responsive way of working that adapts to who you are. I follow the person in front of me, not a prescribed sequence.</p>
+      </div>
+    </div>
+
+    <div class="framework-group framework-group--swap reveal">
+      <div class="framework-body-col">
+        <p class="framework-body">Everything in therapy happens through the relationship. I pay close attention to what unfolds between us — what is said and what remains unsaid, moments of rupture and repair. I bring warmth and directness in equal measure.</p>
+      </div>
+      <div class="framework-card">
+        <h3 class="framework-title">A relationship built on trust</h3>
+        <blockquote class="framework-quote">"And the day came when the risk to remain tight in a bud was more painful than the risk it took to blossom." Anais Nin
+</blockquote>
+        <p class="framework-label">How we work</p>
+      </div>
+    </div>
+
+    <div class="framework-group reveal">
+      <div class="framework-card">
+        <h3 class="framework-title">Drawing, dreaming, making meaning</h3>
+        <blockquote class="framework-quote">Tell me, what is it you plan to do with your one wild and precious life? — Mary Oliver</blockquote>
+        <p class="framework-label">The methods</p>
+      </div>
+      <div class="framework-body-col">
+        <p class="framework-body">Alongside talking, I sometimes invite drawing or dream work as a way of reaching places words alone cannot. My Fine Art background means I approach sessions with the same patient, curious enquiry I once brought to the studio — without agenda, following what feels alive.</p>
       </div>
     </div>
   </section>
