@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Approach — Carla Burns</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:           #F7F4EE;
+      --surface:      #EDE8DF;
+      --surface-2:    #E4DDD2;
+      --text:         #2C2420;
+      --text-muted:   #7A6E66;
+      --text-faint:   #A49890;
+      --accent:       #8B6E5A;
+      --accent-light: rgba(139, 110, 90, 0.12);
+      --border:       #D9D1C6;
+      --border-light: #E8E2DA;
+
+      --font-serif: 'Lora', Georgia, serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+
+      --nav-h: 60px;
+      --max-w: 960px;
+      --pad-h: clamp(1.25rem, 5vw, 3rem);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── NAV ─── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--pad-h);
+      background: rgba(247, 244, 238, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      z-index: 100;
+      transition: border-color 0.3s;
+    }
+
+    .nav.scrolled { border-bottom-color: var(--border-light); }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text); }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      padding: calc(var(--nav-h) + 5rem) var(--pad-h) clamp(3rem, 6vh, 4.5rem);
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .page-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 1.1rem;
+      animation: fadeUp 0.5s ease forwards;
+      animation-delay: 0.05s;
+      opacity: 0;
+    }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      animation: fadeUp 0.65s ease forwards;
+      animation-delay: 0.2s;
+      opacity: 0;
+    }
+
+    .page-intro {
+      margin-top: 1.5rem;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      max-width: 52ch;
+      line-height: 1.8;
+      animation: fadeUp 0.65s ease forwards;
+      animation-delay: 0.35s;
+      opacity: 0;
+    }
+
+    /* ─── SECTION DIVIDER ─── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border-light);
+      margin: 0 var(--pad-h);
+    }
+
+    /* ─── SHARED BLOCK ELEMENTS ─── */
+    .block-eyebrow {
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .block-attribution {
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--text-faint);
+      font-style: normal;
+      font-family: var(--font-sans);
+    }
+
+    .block-body {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+    }
+
+    .block-body p + p { margin-top: 1rem; }
+
+
+    /* ══════════════════════════════════════════════
+       LAYOUT A — Equal columns, clean vertical rule
+       Left: eyebrow → title → blockquote w/ bar
+       Right: body description
+    ══════════════════════════════════════════════ */
+    .approach-block {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: clamp(3rem, 7vh, 5rem) var(--pad-h);
+    }
+
+    .layout-a .block-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--border-light);
+      padding-top: 2.5rem;
+    }
+
+    .layout-a .block-left {
+      border-right: 1px solid var(--border-light);
+      padding-right: clamp(1.5rem, 4vw, 3rem);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .layout-a .block-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+      margin-top: 0.5rem;
+    }
+
+    .layout-a .block-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+      border-left: 2px solid var(--accent);
+      padding-left: 1.1rem;
+    }
+
+    .layout-a .block-right {
+      padding-left: clamp(1.5rem, 4vw, 3rem);
+      padding-top: 2.4rem;
+    }
+
+
+    /* ══════════════════════════════════════════════
+       LAYOUT B — Asymmetric, tinted card on left
+       Left (40%): surface card, eyebrow at foot
+       Right (60%): body with breathing room
+    ══════════════════════════════════════════════ */
+    .layout-b .block-inner {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: clamp(1.5rem, 4vw, 2.5rem);
+      align-items: start;
+    }
+
+    .layout-b .block-left {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: 1.75rem 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .layout-b .block-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--text);
+    }
+
+    .layout-b .block-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 0.96rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+
+    .layout-b .block-eyebrow-foot {
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-light);
+      margin-top: 0.25rem;
+    }
+
+    .layout-b .block-right { padding-top: 0.15rem; }
+
+
+    /* ══════════════════════════════════════════════
+       LAYOUT C — Oversized pull quote as anchor
+       Left (55%): quote large, title as footnote
+       Right (45%): eyebrow, heading, description
+    ══════════════════════════════════════════════ */
+    .layout-c .block-inner {
+      display: grid;
+      grid-template-columns: 11fr 9fr;
+      gap: clamp(2rem, 5vw, 4rem);
+      border-top: 2px solid var(--accent);
+      padding-top: 2.5rem;
+      align-items: start;
+    }
+
+    .layout-c .block-left {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .layout-c .block-quote-large {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.2rem, 3vw, 1.65rem);
+      line-height: 1.5;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .layout-c .block-label {
+      font-size: 0.82rem;
+      font-family: var(--font-sans);
+      font-weight: 400;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-light);
+      padding-top: 1rem;
+    }
+
+    .layout-c .block-right { padding-top: 0.1rem; }
+
+    .layout-c .block-right-eyebrow {
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 1rem;
+    }
+
+    .layout-c .block-right-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+
+    /* ══════════════════════════════════════════════
+       LAYOUT D — Stacked cards
+       Each card: full width, all 4 elements stacked
+       vertically inside. Header — title — quote — body.
+    ══════════════════════════════════════════════ */
+    .layout-d { padding-bottom: clamp(3.5rem, 8vh, 6rem); }
+
+    .layout-d .section-heading {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: clamp(3rem, 7vh, 5rem) var(--pad-h) 2.5rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .layout-d .section-heading .block-eyebrow { margin-bottom: 0.9rem; }
+
+    .layout-d .section-heading h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .card-stack {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--pad-h);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .stack-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .stack-card-inner {
+      padding: 2rem 2.25rem 2rem;
+    }
+
+    .stack-card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .stack-card-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.25;
+    }
+
+    .stack-card-eyebrow {
+      font-size: 0.64rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      white-space: nowrap;
+      margin-left: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .stack-card-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      padding: 1rem 1.25rem;
+      background: var(--surface-2);
+      border-radius: 6px;
+    }
+
+    .stack-card-attribution {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.7rem;
+      font-style: normal;
+      font-family: var(--font-sans);
+      color: var(--text-faint);
+      letter-spacing: 0.04em;
+    }
+
+    .stack-card-body {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+    }
+
+    .stack-card-body p + p { margin-top: 0.85rem; }
+
+
+    /* ─── FOOTER CTA ─── */
+    .footer-cta {
+      background: var(--surface);
+      border-top: 1px solid var(--border-light);
+      text-align: center;
+      padding: clamp(3rem, 7vh, 5rem) var(--pad-h);
+    }
+
+    .footer-cta-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .footer-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .footer-cred {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-light);
+      font-size: 0.72rem;
+      color: var(--text-faint);
+      letter-spacing: 0.04em;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 9999px;
+      padding: 0.65rem 1.6rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .cta-btn:hover { background: var(--accent); color: #fff; }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .page-eyebrow, .page-title, .page-intro {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+
+      .layout-a .block-inner,
+      .layout-b .block-inner,
+      .layout-c .block-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .layout-a .block-left {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+        padding-right: 0;
+        padding-bottom: 2rem;
+      }
+
+      .layout-a .block-right { padding-left: 0; padding-top: 2rem; }
+
+      .layout-c .block-right-title { display: none; }
+
+      .stack-card-header { flex-direction: column; gap: 0.4rem; }
+      .stack-card-eyebrow { margin-left: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <a href="index.html" class="nav-logo">Carla Burns</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="approach.html" class="active">Approach</a></li>
+      <li><a href="index.html#focus">Areas of focus</a></li>
+      <li><a href="index.html#practical">Practical</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <p class="page-eyebrow">How I work</p>
+    <h1 class="page-title">My approach</h1>
+    <p class="page-intro">Therapy is not a fixed method applied to a problem — it is a living encounter. Here is some of what shapes how I work.</p>
+  </header>
+
+  <hr class="section-divider" />
+
+
+  <!-- ═══════════════════════════════════════════
+       LAYOUT A — Equal columns, vertical rule
+  ════════════════════════════════════════════ -->
+  <section class="approach-block layout-a">
+    <div class="block-inner reveal">
+      <div class="block-left">
+        <p class="block-eyebrow">The framework</p>
+        <h2 class="block-title">Integrative transpersonal psychotherapy</h2>
+        <blockquote class="block-quote">
+          The privilege of a lifetime is to become who you truly are.
+          <span class="block-attribution">— C.G. Jung</span>
+        </blockquote>
+      </div>
+      <div class="block-right">
+        <div class="block-body">
+          <p>My training at Re-Vision College, London forms the bedrock of how I work. Integrative therapy means drawing on a range of psychological traditions — psychodynamic, humanistic, existential — rather than following a single fixed model. I follow the person in front of me, not a prescribed sequence.</p>
+          <p>Transpersonal means I attend to the deeper dimensions of experience: meaning, spiritual inquiry, the parts of us that reach beyond ordinary identity. Together these create a spacious, responsive way of working. Nothing is forced. Everything is held.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+
+  <!-- ═══════════════════════════════════════════
+       LAYOUT B — Asymmetric, tinted left card
+  ════════════════════════════════════════════ -->
+  <section class="approach-block layout-b">
+    <div class="block-inner reveal">
+      <div class="block-left">
+        <h2 class="block-title">A relationship built on trust</h2>
+        <blockquote class="block-quote">
+          What we need is someone who believes in us, even when we cannot believe in ourselves.
+          <span class="block-attribution">Anon</span>
+        </blockquote>
+        <p class="block-eyebrow-foot">How we work</p>
+      </div>
+      <div class="block-right">
+        <div class="block-body">
+          <p>Everything in therapy happens through the relationship. The quality of connection between us — the consistency, the honesty, the care — is itself therapeutic. I work relationally, paying close attention to what unfolds between us: what is said and what remains unsaid, moments of rupture and repair.</p>
+          <p>I bring warmth and directness in equal measure. You do not have to perform wellness here, or arrive with the right words. Sessions are fifty minutes, weekly to begin with, adjusted as the work finds its rhythm.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+
+  <!-- ═══════════════════════════════════════════
+       LAYOUT C — Pull quote as visual anchor
+  ════════════════════════════════════════════ -->
+  <section class="approach-block layout-c">
+    <div class="block-inner reveal">
+      <div class="block-left">
+        <blockquote class="block-quote-large">
+          Tell me, what is it you plan to do
+          with your one wild and precious life?
+        </blockquote>
+        <p class="block-attribution">— Mary Oliver, <em>The Summer Day</em></p>
+        <p class="block-label">Drawing, dreaming, making meaning</p>
+      </div>
+      <div class="block-right">
+        <p class="block-right-eyebrow">The methods</p>
+        <h2 class="block-right-title">Drawing, dreaming, making meaning</h2>
+        <div class="block-body">
+          <p>Alongside talking, I sometimes invite drawing — not as art-making, but as a way of reaching places words alone cannot. Dream work, too, can open surprising doors. My background in Fine Art means I approach sessions with the same quality of open enquiry I once brought to the studio: patient, curious, without agenda.</p>
+          <p>Nothing is required except a willingness to explore. If images and dreams feel foreign to you, we simply follow what feels alive. The work shapes itself around you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+
+  <!-- ═══════════════════════════════════════════
+       LAYOUT D — Stacked cards
+       Each card: header — quote — description
+  ════════════════════════════════════════════ -->
+  <div class="layout-d">
+    <div class="layout-d section-heading reveal">
+      <p class="block-eyebrow">At a glance</p>
+      <h2>Three pillars of the work</h2>
+    </div>
+
+    <div class="card-stack">
+
+      <article class="stack-card reveal">
+        <div class="stack-card-inner">
+          <div class="stack-card-header">
+            <h3 class="stack-card-title">Integrative transpersonal psychotherapy</h3>
+            <span class="stack-card-eyebrow">The framework</span>
+          </div>
+          <blockquote class="stack-card-quote">
+            The privilege of a lifetime is to become who you truly are.
+            <span class="stack-card-attribution">— C.G. Jung</span>
+          </blockquote>
+          <div class="stack-card-body">
+            <p>My training at Re-Vision College draws on a range of traditions — psychodynamic, humanistic, existential, transpersonal — creating a spacious, responsive way of working that adapts to who you are. I follow the person in front of me, not a prescribed sequence.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="stack-card reveal">
+        <div class="stack-card-inner">
+          <div class="stack-card-header">
+            <h3 class="stack-card-title">A relationship built on trust</h3>
+            <span class="stack-card-eyebrow">How we work</span>
+          </div>
+          <blockquote class="stack-card-quote">
+            What we need is someone who believes in us, even when we cannot believe in ourselves.
+            <span class="stack-card-attribution">Anon</span>
+          </blockquote>
+          <div class="stack-card-body">
+            <p>Everything in therapy happens through the relationship. I pay close attention to what unfolds between us — what is said and what remains unsaid, moments of rupture and repair. I bring warmth and directness in equal measure.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="stack-card reveal">
+        <div class="stack-card-inner">
+          <div class="stack-card-header">
+            <h3 class="stack-card-title">Drawing, dreaming, making meaning</h3>
+            <span class="stack-card-eyebrow">The methods</span>
+          </div>
+          <blockquote class="stack-card-quote">
+            Tell me, what is it you plan to do with your one wild and precious life?
+            <span class="stack-card-attribution">— Mary Oliver</span>
+          </blockquote>
+          <div class="stack-card-body">
+            <p>Alongside talking, I sometimes invite drawing or dream work as a way of reaching places words alone cannot. My Fine Art background means I approach sessions with the same patient, curious enquiry I once brought to the studio — without agenda, following what feels alive.</p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+
+  <!-- FOOTER CTA -->
+  <footer class="footer-cta" id="contact">
+    <div class="footer-cta-inner">
+      <h2 class="footer-title reveal">Ready to take the first step?</h2>
+      <p class="footer-sub reveal">Email me for a free 20-minute consultation — no commitment, just a conversation.</p>
+      <a href="mailto:burnscarla@gmail.com" class="cta-btn reveal">Get in touch</a>
+      <p class="footer-cred reveal">UKCP &amp; BACP Registered &nbsp;·&nbsp; © Carla Burns 2025</p>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

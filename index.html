@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carla Burns — The Listening Place</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:           #F7F4EE;
+      --surface:      #EDE8DF;
+      --surface-2:    #E4DDD2;
+      --text:         #2C2420;
+      --text-muted:   #7A6E66;
+      --text-faint:   #A49890;
+      --accent:       #8B6E5A;
+      --accent-light: rgba(139, 110, 90, 0.12);
+      --border:       #D9D1C6;
+      --border-light: #E8E2DA;
+
+      --font-serif: 'Lora', Georgia, serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+
+      --nav-h: 60px;
+      --max-w: 800px;
+      --pad-h: clamp(1.25rem, 5vw, 3rem);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── NAV ─── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--pad-h);
+      background: rgba(247, 244, 238, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      z-index: 100;
+      transition: border-color 0.3s;
+    }
+
+    .nav.scrolled { border-bottom-color: var(--border-light); }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: calc(var(--nav-h) + 3rem) var(--pad-h) clamp(3rem, 8vh, 5rem);
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .hero-location {
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.5s ease forwards;
+      animation-delay: 0.05s;
+      opacity: 0;
+    }
+
+    .hero-name {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      animation: fadeUp 0.65s ease forwards;
+      animation-delay: 0.15s;
+      opacity: 0;
+    }
+
+    .hero-sub {
+      font-size: 0.85rem;
+      color: var(--text-faint);
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.65s ease forwards;
+      animation-delay: 0.3s;
+      opacity: 0;
+    }
+
+    .hero-quote {
+      font-family: var(--font-serif);
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.65;
+      color: var(--text);
+      max-width: 46ch;
+      border-left: 2px solid var(--accent);
+      padding-left: 1.25rem;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.65s ease forwards;
+      animation-delay: 0.45s;
+      opacity: 0;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 9999px;
+      padding: 0.65rem 1.6rem;
+      transition: background 0.2s, color 0.2s;
+      animation: fadeUp 0.65s ease forwards;
+      animation-delay: 0.6s;
+      opacity: 0;
+    }
+
+    .hero-cta:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ─── DIVIDER ─── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border-light);
+      margin: 0 var(--pad-h);
+    }
+
+    /* ─── SECTIONS ─── */
+    .section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: clamp(3.5rem, 8vh, 6rem) var(--pad-h);
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 1.25rem;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 2rem;
+    }
+
+    /* ─── THERAPY FEELS ─── */
+    .feel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .feel-item {
+      font-family: var(--font-serif);
+      font-size: 0.88rem;
+      font-style: italic;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 0.9rem 1.1rem;
+      line-height: 1.45;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .feel-item:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    /* ─── YOUR STORY ─── */
+    .story-block {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 2rem 2.25rem;
+    }
+
+    .story-quote {
+      font-family: var(--font-serif);
+      font-size: 0.88rem;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .story-body p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 0.85rem;
+    }
+
+    .story-body p:last-child { margin-bottom: 0; }
+
+    /* ─── ABOUT ─── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .about-col {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+    }
+
+    .about-col-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.85rem;
+    }
+
+    .about-col p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 0.6rem;
+    }
+
+    .about-col p:last-child { margin-bottom: 0; }
+
+    .about-focus {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 1.25rem 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .about-focus-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.6rem;
+    }
+
+    .about-focus p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .ally-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ally-label {
+      font-size: 0.65rem;
+      color: var(--text-faint);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-right: 0.25rem;
+    }
+
+    .ally-tag {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      padding: 0.2rem 0.75rem;
+    }
+
+    /* ─── AREAS OF FOCUS ─── */
+    .spec-group {
+      margin-bottom: 1.75rem;
+    }
+
+    .spec-group:last-child { margin-bottom: 0; }
+
+    .spec-group-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.75rem;
+    }
+
+    .spec-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .spec-tag {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      padding: 0.3rem 0.9rem;
+      background: var(--surface);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .spec-tag:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    /* ─── PRACTICAL ─── */
+    .practical-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+
+    .practical-item {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+    }
+
+    .practical-item.wide {
+      grid-column: 1 / -1;
+    }
+
+    .pi-label {
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.3rem;
+    }
+
+    .pi-val {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ─── FOOTER CTA ─── */
+    .footer-cta {
+      background: var(--surface);
+      border-top: 1px solid var(--border-light);
+      text-align: center;
+      padding: clamp(3rem, 7vh, 5rem) var(--pad-h);
+    }
+
+    .footer-cta-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .footer-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .footer-cred {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-light);
+      font-size: 0.72rem;
+      color: var(--text-faint);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .hero-location, .hero-name, .hero-sub,
+      .hero-quote, .hero-cta {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      .feel-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+      .practical-grid { grid-template-columns: 1fr 1fr; }
+      .practical-item.wide { grid-column: 1 / -1; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <a href="index.html" class="nav-logo">Carla Burns</a>
+    <ul class="nav-links">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="approach.html">Approach</a></li>
+      <li><a href="#focus">Areas of focus</a></li>
+      <li><a href="#practical">Practical</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <p class="hero-location">The Listening Place &mdash; Limerick, Ireland</p>
+    <h1 class="hero-name">Carla Burns</h1>
+    <p class="hero-sub">Counselling &amp; Psychotherapy &nbsp;·&nbsp; Online &amp; in person</p>
+    <blockquote class="hero-quote">
+      Whether we meet online or in person, I provide a calm and respectful space to explore your unique story.
+    </blockquote>
+    <a href="mailto:burnscarla@gmail.com" class="hero-cta">
+      Email me for a free 20&#8209;minute consultation
+    </a>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- THERAPY CAN FEEL LIKE -->
+  <section class="section" id="therapy">
+    <p class="section-label reveal">What therapy can feel like</p>
+    <h2 class="section-title reveal">A place to be completely yourself.</h2>
+    <div class="feel-grid">
+      <div class="feel-item reveal">Staying when I'd usually run</div>
+      <div class="feel-item reveal">Saying things out loud for the first time</div>
+      <div class="feel-item reveal">Honesty that's hard, but a relief</div>
+      <div class="feel-item reveal">Putting down a heavy load</div>
+      <div class="feel-item reveal">A relationship I can trust</div>
+      <div class="feel-item reveal">Being completely myself. No masking</div>
+      <div class="feel-item reveal">Being vulnerable but safe</div>
+      <div class="feel-item reveal">Meeting my demons and my angels</div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- YOUR STORY -->
+  <section class="section" id="story">
+    <p class="section-label reveal">Your story</p>
+    <h2 class="section-title reveal">Healing begins where the wound was made.</h2>
+    <div class="story-block reveal">
+      <p class="story-quote">"Healing begins where the wound was made" &mdash; Alice Walker</p>
+      <div class="story-body">
+        <p>Telling your story can be an important part of therapy — reflecting on your past, your childhood, and the relational and emotional environments that have shaped you. We may also consider intergenerational patterns: the ways experiences, beliefs, and wounds can be carried across families, often outside of conscious awareness.</p>
+        <p>We can also work with where you are now, focusing on your current experience and where you would like to get to. Therapy can move fluidly between past and present, always guided by what feels most relevant and supportive for you.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <p class="section-label reveal">About Carla</p>
+    <h2 class="section-title reveal">Training, background &amp; approach</h2>
+    <div class="about-grid">
+      <div class="about-col reveal">
+        <p class="about-col-label">Training &amp; credentials</p>
+        <p>Integrative Transpersonal Counselling &amp; Psychotherapy<br />Re-Vision College, London</p>
+        <p>MA Psychology, Edinburgh University</p>
+        <p>Registered member, UKCP &amp; BACP</p>
+        <p>Private practice since 2018</p>
+      </div>
+      <div class="about-col reveal">
+        <p class="about-col-label">Background &amp; approach</p>
+        <p>Third Culture Kid — raised in Ireland by Scottish parents. A lived understanding of navigating multiple heritages and belonging.</p>
+        <p>Fine Art practice (BA, PGDip). Approaches counselling with the same enquiry held as a creative practitioner.</p>
+        <p>Long-term personal experience of therapy — an inside-out knowledge of how rewarding it can be.</p>
+      </div>
+    </div>
+    <div class="about-focus reveal">
+      <p class="about-focus-label">Current areas of focus</p>
+      <p>Modern family building (IVF, assisted conception, donor conception, SMBC, solo parenting) &nbsp;·&nbsp; Neurodiversity and neuroaffirmative therapy &nbsp;·&nbsp; Difficult feelings and experiences in motherhood</p>
+    </div>
+    <div class="ally-row reveal">
+      <span class="ally-label">Allied:</span>
+      <span class="ally-tag">Bisexual</span>
+      <span class="ally-tag">Gay</span>
+      <span class="ally-tag">Lesbian</span>
+      <span class="ally-tag">Non-binary</span>
+      <span class="ally-tag">Queer</span>
+      <span class="ally-tag">Transgender</span>
+      <span class="ally-tag">Racial justice</span>
+      <span class="ally-tag">Single parent</span>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- AREAS OF FOCUS -->
+  <section class="section" id="focus">
+    <p class="section-label reveal">Areas of focus</p>
+    <h2 class="section-title reveal">What we can work through together</h2>
+
+    <div class="spec-group reveal">
+      <p class="spec-group-label">Anxiety &amp; mood</p>
+      <div class="spec-tags">
+        <span class="spec-tag">Anxiety</span>
+        <span class="spec-tag">Depression</span>
+        <span class="spec-tag">Stress</span>
+        <span class="spec-tag">Anger management</span>
+        <span class="spec-tag">Emotional disturbance</span>
+      </div>
+    </div>
+
+    <div class="spec-group reveal">
+      <p class="spec-group-label">Trauma &amp; identity</p>
+      <div class="spec-tags">
+        <span class="spec-tag">Trauma and PTSD</span>
+        <span class="spec-tag">Belonging &amp; identity</span>
+        <span class="spec-tag">Self-esteem</span>
+        <span class="spec-tag">Addiction</span>
+        <span class="spec-tag">Suicidal ideation</span>
+        <span class="spec-tag">Dark nights of the soul</span>
+        <span class="spec-tag">Spirituality</span>
+      </div>
+    </div>
+
+    <div class="spec-group reveal">
+      <p class="spec-group-label">Relationships &amp; family</p>
+      <div class="spec-tags">
+        <span class="spec-tag">Relationship issues</span>
+        <span class="spec-tag">Parenting</span>
+        <span class="spec-tag">Modern family building</span>
+        <span class="spec-tag">Infertility</span>
+        <span class="spec-tag">Bereavement</span>
+      </div>
+    </div>
+
+    <div class="spec-group reveal">
+      <p class="spec-group-label">Life transitions</p>
+      <div class="spec-tags">
+        <span class="spec-tag">Life transitions</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- PRACTICAL -->
+  <section class="section" id="practical">
+    <p class="section-label reveal">Practical</p>
+    <h2 class="section-title reveal">What to expect</h2>
+    <div class="practical-grid">
+      <div class="practical-item reveal">
+        <p class="pi-label">Location</p>
+        <p class="pi-val">George's Quay, Limerick<br />Wheelchair accessible</p>
+      </div>
+      <div class="practical-item reveal">
+        <p class="pi-label">Format</p>
+        <p class="pi-val">Online &amp; in person<br />Adults one-to-one</p>
+      </div>
+      <div class="practical-item reveal">
+        <p class="pi-label">Availability</p>
+        <p class="pi-val">Weekdays</p>
+      </div>
+     
+    </div>
+  </section>
+
+  <!-- FOOTER CTA -->
+  <footer class="footer-cta" id="contact">
+    <div class="footer-cta-inner">
+      <h2 class="footer-title reveal">Ready to take the first step?</h2>
+      <p class="footer-sub reveal">Email me for a free 20-minute consultation — no commitment, just a conversation.</p>
+      <a href="mailto:burnscarla@gmail.com" class="hero-cta reveal">Get in touch</a>
+      <p class="footer-cred reveal">UKCP &amp; BACP Registered &nbsp;·&nbsp; © Carla Burns 2025</p>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll border
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          entry.target.style.transitionDelay = `${i * 0.04}s`;
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section[id], footer[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const link = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { threshold: 0.4 });
+
+    sections.forEach(s => navObserver.observe(s));
+  </script>
+</body>
+</html>
